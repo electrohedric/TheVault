@@ -2,7 +2,7 @@ package util;
 
 import static org.lwjgl.openal.AL10.*;
 
-import staindev.Game;
+import main.Game;
 
 public class Music {
 

@@ -3,7 +3,7 @@ package guis;
 import constants.Mode;
 import constants.Textures;
 import gl.Texture;
-import staindev.Game;
+import main.Game;
 import util.Animation;
 
 public class PlayScreen extends Gui {

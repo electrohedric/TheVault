@@ -7,8 +7,8 @@ import org.joml.Vector4f;
 
 import constants.Shaders;
 import gl.Shader;
+import main.Game;
 import objects.Point;
-import staindev.Game;
 import util.Camera;
 
 public class Dot {

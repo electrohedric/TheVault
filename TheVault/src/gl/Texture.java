@@ -14,6 +14,7 @@ import javax.imageio.ImageIO;
 import org.lwjgl.BufferUtils;
 
 import constants.Resources;
+import constants.Textures;
 import objects.Surface;
 import util.Log;
 
@@ -133,8 +134,10 @@ public class Texture extends Surface {
 		if(isLoaded) {
 			glActiveTexture(GL_TEXTURE0 + slot);
 			glBindTexture(GL_TEXTURE_2D, id);
-		} else
-			throw new IllegalStateException("Tried to bind " + filename + " but can't because texture not loaded"); // XXX: for debugging, instead bind a dev null texture
+		} else {
+			Log.warn("Tried to bind " + filename + " but can't because texture not loaded");
+			Textures.get("devnull").bind();
+		}
 	}
 	
 	public void bind() {

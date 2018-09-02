@@ -10,7 +10,7 @@ import java.nio.ByteBuffer;
 import org.joml.Matrix4f;
 import org.lwjgl.BufferUtils;
 
-import staindev.Game;
+import main.Game;
 import util.Log;
 
 public class FrameBufferRenderBuffer {

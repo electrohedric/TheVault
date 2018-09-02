@@ -6,7 +6,7 @@ import org.joml.Matrix4f;
 
 import constants.Shaders;
 import gl.Shader;
-import staindev.Game;
+import main.Game;
 import util.Camera;
 
 // TODO this should probably be abstract eventually

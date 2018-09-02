@@ -6,8 +6,8 @@ import java.util.List;
 
 import constants.Resources;
 import gl.Texture;
+import main.Game;
 import objects.Surface;
-import staindev.Game;
 
 public class Animation extends Surface {
 	

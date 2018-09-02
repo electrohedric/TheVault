@@ -1,8 +1,8 @@
 package guis;
 
+import main.Game;
 import objects.GameObject;
 import objects.Surface;
-import staindev.Game;
 
 public class Screen extends GameObject {
 

@@ -1,4 +1,4 @@
-package staindev;
+package main;
 
 import static org.lwjgl.glfw.Callbacks.glfwFreeCallbacks;
 import static org.lwjgl.glfw.GLFW.*;
@@ -19,6 +19,7 @@ import guis.PlayScreen;
 import guis.SetupScreen;
 import guis.TitleScreen;
 import objects.Line;
+import objects.Map;
 import objects.Point;
 import objects.Rect;
 import util.Camera;
@@ -40,6 +41,7 @@ public class Game {
 	public static Matrix4f proj = new Matrix4f(); // can't instantiate until WIDTH and HEIGHT are set
 	public static Matrix4f projSave = new Matrix4f(); // projection matrix to save the initial state
 	public static final Camera nullCamera = new Camera(0, 0); // null camera doesn't change and is mostly for rendering UIs
+	public static Map map;
 	
 	public static void main(String[] args) {
 		Log.log("LWJGL version " + Version.getVersion());
@@ -125,6 +127,7 @@ public class Game {
 		Point.init();
 		proj = new Matrix4f().ortho(0, Game.WIDTH, 0, Game.HEIGHT, -1.0f, 1.0f);
 		projSave = new Matrix4f(proj);
+		map = new Map("map");
 		
 		// Set the clear color
 		Renderer.setClearColor(0, 0, 0);
@@ -173,7 +176,7 @@ public class Game {
 			updateGame();
 			renderGame();
 			
-			glfwSwapBuffers(window); // swap the color buffers (tick) XXX implement fps system. Update every 1/120 seconds, render at vsync
+			glfwSwapBuffers(window); // swap the color buffers (tick)
 			
 			checkError();
 			

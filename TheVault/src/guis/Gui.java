@@ -7,7 +7,7 @@ import static org.lwjgl.glfw.GLFW.*;
 
 import gl.Texture;
 import guis.elements.Button;
-import staindev.Game;
+import main.Game;
 import util.Cursors;
 
 public abstract class Gui {

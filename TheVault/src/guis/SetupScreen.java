@@ -6,7 +6,7 @@ import java.util.List;
 import constants.Mode;
 import constants.Textures;
 import guis.elements.Button;
-import staindev.Game;
+import main.Game;
 
 public class SetupScreen extends Gui {
 	
@@ -62,7 +62,7 @@ public class SetupScreen extends Gui {
 		elements_pawnSelection.add(b_blue);
 		elements_pawnSelection.add(b_green);
 		elements_pawnSelection.add(b_yellow);
-		elements_pawnSelection.add(new Button(Game.WIDTH * 0.8f, Game.HEIGHT * 0.3f, 0.2f, Textures.get("button_next"), Mode.SETUP, true, () -> { // next to pawn placement
+		elements_pawnSelection.add(new Button(Game.WIDTH * 0.88f, Game.HEIGHT * 0.3f, 0.2f, Textures.get("button_next"), Mode.SETUP, true, () -> { // next to pawn placement
 			setupMode = SetupMode.PLACEMENT;
 			elements.clear();
 			elements.addAll(elements_placement);
@@ -72,7 +72,7 @@ public class SetupScreen extends Gui {
 				b.enable();
 		}));
 		
-		elements_placement.add(new Button(Game.WIDTH * 0.2f, Game.HEIGHT * 0.3f, 0.2f, Textures.get("button_back"), Mode.SETUP, true, () -> { // back to pawn selection
+		elements_placement.add(new Button(Game.WIDTH * 0.12f, Game.HEIGHT * 0.3f, 0.2f, Textures.get("button_back"), Mode.SETUP, true, () -> { // back to pawn selection
 			setupMode = SetupMode.PAWN_SELECTION;
 			elements.clear();
 			elements.addAll(elements_pawnSelection);
@@ -152,6 +152,7 @@ public class SetupScreen extends Gui {
 			break;
 		case PLACEMENT:
 			super.render();
+			Game.map.render();
 			break;
 		default:
 			break;

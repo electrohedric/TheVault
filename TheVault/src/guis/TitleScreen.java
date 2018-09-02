@@ -3,7 +3,7 @@ package guis;
 import constants.Mode;
 import constants.Textures;
 import guis.elements.Button;
-import staindev.Game;
+import main.Game;
 
 public class TitleScreen extends Gui {
 	
@@ -30,7 +30,7 @@ public class TitleScreen extends Gui {
 	
 	@Override
 	public void update() {
-		super.update(); // TODO make moving hand
+		super.update();
 	}
 
 	@Override

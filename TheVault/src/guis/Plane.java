@@ -7,8 +7,8 @@ import org.joml.Vector4f;
 
 import constants.Shaders;
 import gl.Shader;
+import main.Game;
 import objects.Rect;
-import staindev.Game;
 import util.Camera;
 
 //TODO make this implement a Renderable class which has the matrices, program, slot, x, and y set up, and render() abstract method

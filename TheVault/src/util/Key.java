@@ -2,7 +2,7 @@ package util;
 
 import static org.lwjgl.glfw.GLFW.*;
 
-import staindev.Game;
+import main.Game;
 
 public class Key {
 	
