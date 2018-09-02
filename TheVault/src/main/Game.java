@@ -127,7 +127,7 @@ public class Game {
 		Point.init();
 		proj = new Matrix4f().ortho(0, Game.WIDTH, 0, Game.HEIGHT, -1.0f, 1.0f);
 		projSave = new Matrix4f(proj);
-		map = new Map("map");
+		map = new Map("map", Game.WIDTH * 0.5f, Game.HEIGHT * 0.5f);
 		
 		// Set the clear color
 		Renderer.setClearColor(0, 0, 0);

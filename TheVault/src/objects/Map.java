@@ -16,12 +16,17 @@ public class Map {
 	
 	private int width;
 	private int height;
-	private Square[] squares;
-	private Plane[] planes;
+	private Tile[] tiles;
 	private Plane backgroundPlane;
 	private Camera camera;
 	
-	public Map(String name) {
+	private int SPACING;
+	private int TOTAL_HEIGHT;
+	private int TOTAL_WIDTH;
+	private int SQUARE_SIZE;
+	private int SQUARE_DISTANCE;
+	
+	public Map(String name, float centerX, float centerY) {
 		String fullPath = Resources.DATA_PATH + name + ".png";
 		BufferedImage image = null;
 		try {
@@ -30,27 +35,27 @@ public class Map {
 			Log.err("Cannot open file: " + fullPath);
 		}
 		
-		this.camera = new Camera(-1000, -500); // FIXME figure out what to change this to and add methods to change it
 		this.width = image.getWidth();
 		this.height = image.getHeight();
 		int size = width * height * 4; // width * height * channels
 		int[] store = new int[size];
 		image.getData().getPixels(0, 0, image.getWidth(), image.getHeight(), store);
-		this.squares = new Square[width * height];
-		this.planes = new Plane[width * height];
+		this.tiles = new Tile[width * height];
 		
-		int SPACING = (int) (Game.HEIGHT * 0.005f); // 5 pixels on a 1080p screen
-		int TOTAL_HEIGHT = (int) (Game.HEIGHT * 0.8f); // 80% of screen
-		int TOTAL_WIDTH = (int) (TOTAL_HEIGHT * height / width);
-		int SQUARE_SIZE = (int) ((TOTAL_HEIGHT - (height + 1) * SPACING) / height); // calculate square size to maximize space but contrained to height
-		int SQUARE_DISTANCE = SPACING + SQUARE_SIZE;
+		this.SPACING = (int) (Game.HEIGHT * 0.005f); // 5 pixels on a 1080p screen
+		this.TOTAL_HEIGHT = (int) (Game.HEIGHT * 0.8f); // 80% of screen
+		this.TOTAL_WIDTH = (int) (TOTAL_HEIGHT * height / width);
+		this.SQUARE_SIZE = (int) ((TOTAL_HEIGHT - (height + 1) * SPACING) / height); // calculate square size to maximize space but contrained to height
+		this.SQUARE_DISTANCE = SPACING + SQUARE_SIZE;
 		TOTAL_HEIGHT = SQUARE_DISTANCE * height + SPACING; // recalculate since everything got trimmed slightly being rounded down and all
 		TOTAL_WIDTH = SQUARE_DISTANCE * width + SPACING;
 		int INITIAL_CENTER_X = -TOTAL_WIDTH / 2 + SPACING + SQUARE_SIZE / 2;
-		int INITIAL_CENTER_Y = -TOTAL_HEIGHT / 2 + SPACING + SQUARE_SIZE / 2;
+		int INITIAL_CENTER_Y = TOTAL_HEIGHT / 2 - SPACING - SQUARE_SIZE / 2;
 		int x = INITIAL_CENTER_X;
 		int y = INITIAL_CENTER_Y;
 		this.backgroundPlane = new Plane(0, 0, TOTAL_WIDTH, TOTAL_HEIGHT, 0, 0, 0, 255);
+		this.camera = new Camera(0, 0);
+		setCenter(centerX, centerY);
 		
 		int index = 0;
 		for(int i = 0; i < store.length; i += 4) {
@@ -62,30 +67,25 @@ public class Map {
 			
 			switch(color) {
 			case 0xFFFFFF: // white
-				squares[index] = Square.NORMAL;
-				planes[index] = new Plane(x, y, SQUARE_SIZE, SQUARE_SIZE, 255, 255, 255, 255); // TODO we probably want to add textures for each square instead of a color, but for now...
+				tiles[index] = new Tile(Square.NORMAL, new Plane(x, y, SQUARE_SIZE, SQUARE_SIZE, 255, 255, 255, 255));
 				break;
 			case 0xFF0000: // red
-				squares[index] = Square.FORGE;
-				planes[index] = new Plane(x, y, SQUARE_SIZE, SQUARE_SIZE, 255, 0, 0, 255);
+				tiles[index] = new Tile(Square.FORGE, new Plane(x, y, SQUARE_SIZE, SQUARE_SIZE, 255, 0, 0, 255));
 				break;
 			case 0x0000FF: // blue
-				squares[index] = Square.GEM;
-				planes[index] = new Plane(x, y, SQUARE_SIZE, SQUARE_SIZE, 0, 0, 255, 255);
+				tiles[index] = new Tile(Square.GEM, new Plane(x, y, SQUARE_SIZE, SQUARE_SIZE, 0, 0, 255, 255));
 				break;
 			case 0xFFFF00: // yellow
-				squares[index] = Square.CONSUMABLE;
-				planes[index] = new Plane(x, y, SQUARE_SIZE, SQUARE_SIZE, 255, 255, 0, 255);
+				tiles[index] = new Tile(Square.CONSUMABLE, new Plane(x, y, SQUARE_SIZE, SQUARE_SIZE, 255, 255, 0, 255));
 				break;
 			default: // other (black)
-				squares[index] = Square.NONE;
-				planes[index] = new Plane(x, y, SQUARE_SIZE, SQUARE_SIZE, 0, 0, 0, 255); // not stricly nessessary but null isn't great either
+				tiles[index] = new Tile(Square.NONE, new Plane(x, y, SQUARE_SIZE, SQUARE_SIZE, 0, 0, 0, 255));
 				break;
 			}
 			index++;
 			if(index % width == 0) { // we just wrapped. increment y and set x to initial
 				x = INITIAL_CENTER_X;
-				y += SQUARE_DISTANCE;
+				y -= SQUARE_DISTANCE;
 			} else
 				x += SQUARE_DISTANCE;
 		}
@@ -93,12 +93,39 @@ public class Map {
 	
 	public void render() {
 		backgroundPlane.render(camera);
-		for(Plane rect : planes)
-			rect.render(camera);
+		for(Tile tile : tiles)
+			tile.render(camera);
 	}
 	
-	public Square getSquareAt(int x, int y) {
-		return squares[y * width + x];
+	public Tile getTileAt(int x, int y) {
+		return tiles[y * width + x];
+	}
+	
+	public Tile getTileAtMouse() {
+		int mouseX = camera.getMouseX() + TOTAL_WIDTH / 2;
+		int mouseY = TOTAL_HEIGHT / 2 - camera.getMouseY();
+		
+		 // if outside the box, obviously not on a tile
+		if(mouseX < SPACING || mouseX > TOTAL_WIDTH - SPACING || mouseY < SPACING || mouseY > TOTAL_HEIGHT - SPACING)
+			return null;
+		
+		// calculate tile closest tile
+		int tileX = mouseX / SQUARE_DISTANCE;
+		int tileY = mouseY / SQUARE_DISTANCE;
+		
+		// thing is, this includes the spacing on top and left of square, so we have to check to be sure it's not between
+		int tileStartX = SPACING + (tileX * SQUARE_DISTANCE);
+		int tileStartY = SPACING + (tileY * SQUARE_DISTANCE);
+		if(tileStartX <= mouseX && mouseX <= tileStartX + SQUARE_SIZE && tileStartY <= mouseY && mouseY <= tileStartY + SQUARE_SIZE)
+			return getTileAt(tileX, tileY);
+		
+		// otherwise it must be in the spacing, we're not counting that
+		return null;
+	}
+	
+	public void setCenter(float x, float y) {
+		camera.x = -x;
+		camera.y = -y;
 	}
 	
 	public enum Square {

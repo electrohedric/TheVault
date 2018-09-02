@@ -7,8 +7,11 @@ import constants.Mode;
 import constants.Textures;
 import guis.elements.Button;
 import main.Game;
+import util.ClickListener;
+import util.Log;
+import util.Mouse;
 
-public class SetupScreen extends Gui {
+public class SetupScreen extends Gui implements ClickListener {
 	
 	private static SetupScreen instance;
 	private List<Button> toAnimate;
@@ -85,6 +88,7 @@ public class SetupScreen extends Gui {
 		outPlane = new Plane((pawnButtonLeftX + pawnButtonRightX) / 2, pawnButtonInitialY, Game.WIDTH, (pawnButtonSize + 0.05f) * Game.HEIGHT, 117, 0, 0, 127);
 		inPlane = new Plane((pawnButtonLeftX + pawnButtonRightX) / 2, animateFinalY, Game.WIDTH, (pawnButtonSize + 0.05f) * Game.HEIGHT, 0, 117, 0, 127);
 		elements.addAll(elements_pawnSelection);
+		ClickListener.addToCallback(this, Mode.SETUP);
 
 		instance = this;
 	}
@@ -164,8 +168,18 @@ public class SetupScreen extends Gui {
 		Game.mode = Mode.SETUP;
 	}
 	
+
+	@Override
+	public void handleClick(int button) {}
+
+	@Override
+	public void handleRelease(int button) {
+		if(button == Mouse.LEFT) {
+			Log.log(Game.map.getTileAtMouse());
+		}
+	}
+
 	private enum SetupMode {
 		PAWN_SELECTION, PLACEMENT
 	}
-
 }
