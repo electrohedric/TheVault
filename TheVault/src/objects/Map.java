@@ -67,16 +67,16 @@ public class Map {
 			
 			switch(color) {
 			case 0xFFFFFF: // white
-				tiles[index] = new Tile(Square.NORMAL, new Plane(x, y, SQUARE_SIZE, SQUARE_SIZE, 255, 255, 255, 255));
+				tiles[index] = new Tile(Square.NORMAL, new Plane(x, y, SQUARE_SIZE, SQUARE_SIZE, 255, 255, 255, 255)); // we'll specify each color instead of just using r, g, b because we may want to change the tile color slightly wihout the hassle of getting the color exactly right in paint
 				break;
 			case 0xFF0000: // red
-				tiles[index] = new Tile(Square.FORGE, new Plane(x, y, SQUARE_SIZE, SQUARE_SIZE, 255, 0, 0, 255));
+				tiles[index] = new Tile(Square.FORGE, new Plane(x, y, SQUARE_SIZE, SQUARE_SIZE, 255, 100, 100, 255));
 				break;
 			case 0x0000FF: // blue
-				tiles[index] = new Tile(Square.GEM, new Plane(x, y, SQUARE_SIZE, SQUARE_SIZE, 0, 0, 255, 255));
+				tiles[index] = new Tile(Square.GEM, new Plane(x, y, SQUARE_SIZE, SQUARE_SIZE, 100, 100, 255, 255));
 				break;
 			case 0xFFFF00: // yellow
-				tiles[index] = new Tile(Square.CONSUMABLE, new Plane(x, y, SQUARE_SIZE, SQUARE_SIZE, 255, 255, 0, 255));
+				tiles[index] = new Tile(Square.CONSUMABLE, new Plane(x, y, SQUARE_SIZE, SQUARE_SIZE, 255, 255, 100, 255));
 				break;
 			default: // other (black)
 				tiles[index] = new Tile(Square.NONE, new Plane(x, y, SQUARE_SIZE, SQUARE_SIZE, 0, 0, 0, 255));

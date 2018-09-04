@@ -4,8 +4,6 @@ import constants.Mode;
 import gl.Texture;
 import objects.GameObject;
 import util.ClickListener;
-import util.Collision;
-import util.Mouse;
 
 public class Button extends GameObject implements ClickListener {
 
@@ -45,8 +43,7 @@ public class Button extends GameObject implements ClickListener {
 	 */
 	public void update() {
 		if(enabled) {
-			float trueScale = getTrueScale();
-			if(Collision.pointCollidesAABB(Mouse.x, Mouse.y, x - width * trueScale / 2, y - height * trueScale / 2, width * trueScale, height * trueScale)) {
+			if(AACollideMouse()) {
 				if(!mouseHovered) {
 					if(feedback)
 						onEnter();

@@ -8,6 +8,8 @@ import constants.Shaders;
 import gl.Shader;
 import main.Game;
 import util.Camera;
+import util.Collision;
+import util.Mouse;
 
 // TODO this should probably be abstract eventually
 public class GameObject {
@@ -104,6 +106,15 @@ public class GameObject {
 			return Math.min(scaledWidthRatio, scaledHeightRatio);
 		}
 		return 0.0f;
+	}
+	
+	/**
+	 * Collides this GameObject with a point
+	 * <p> *NOTE* <br>If the GameObject is not Axis-Aligned (i.e. rotation is not 0), results may be futile </p>
+	 * @return <code>true</code> if the given point collides with this
+	 */
+	public boolean AACollideMouse() {
+		return Collision.pointCollideAAGameObject(Mouse.x, Mouse.y, this);
 	}
 	
 }

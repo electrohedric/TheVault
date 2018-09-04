@@ -1,8 +1,47 @@
 package main;
 
 import static org.lwjgl.glfw.Callbacks.glfwFreeCallbacks;
-import static org.lwjgl.glfw.GLFW.*;
-import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_ESCAPE;
+import static org.lwjgl.glfw.GLFW.GLFW_PRESS;
+import static org.lwjgl.glfw.GLFW.GLFW_RELEASE;
+import static org.lwjgl.glfw.GLFW.glfwCreateWindow;
+import static org.lwjgl.glfw.GLFW.glfwDefaultWindowHints;
+import static org.lwjgl.glfw.GLFW.glfwDestroyWindow;
+import static org.lwjgl.glfw.GLFW.glfwGetPrimaryMonitor;
+import static org.lwjgl.glfw.GLFW.glfwGetTime;
+import static org.lwjgl.glfw.GLFW.glfwGetVideoMode;
+import static org.lwjgl.glfw.GLFW.glfwInit;
+import static org.lwjgl.glfw.GLFW.glfwMakeContextCurrent;
+import static org.lwjgl.glfw.GLFW.glfwPollEvents;
+import static org.lwjgl.glfw.GLFW.glfwSetErrorCallback;
+import static org.lwjgl.glfw.GLFW.glfwSetKeyCallback;
+import static org.lwjgl.glfw.GLFW.glfwSetMouseButtonCallback;
+import static org.lwjgl.glfw.GLFW.glfwSetWindowShouldClose;
+import static org.lwjgl.glfw.GLFW.glfwShowWindow;
+import static org.lwjgl.glfw.GLFW.glfwSwapBuffers;
+import static org.lwjgl.glfw.GLFW.glfwSwapInterval;
+import static org.lwjgl.glfw.GLFW.glfwTerminate;
+import static org.lwjgl.glfw.GLFW.glfwWindowShouldClose;
+import static org.lwjgl.opengl.GL11.GL_BLEND;
+import static org.lwjgl.opengl.GL11.GL_COLOR_BUFFER_BIT;
+import static org.lwjgl.opengl.GL11.GL_DEPTH_BUFFER_BIT;
+import static org.lwjgl.opengl.GL11.GL_LINE_SMOOTH;
+import static org.lwjgl.opengl.GL11.GL_LINE_SMOOTH_HINT;
+import static org.lwjgl.opengl.GL11.GL_NICEST;
+import static org.lwjgl.opengl.GL11.GL_ONE_MINUS_SRC_ALPHA;
+import static org.lwjgl.opengl.GL11.GL_POINT_SMOOTH;
+import static org.lwjgl.opengl.GL11.GL_POINT_SMOOTH_HINT;
+import static org.lwjgl.opengl.GL11.GL_SRC_ALPHA;
+import static org.lwjgl.opengl.GL11.GL_VERSION;
+import static org.lwjgl.opengl.GL11.glBlendFunc;
+import static org.lwjgl.opengl.GL11.glClear;
+import static org.lwjgl.opengl.GL11.glEnable;
+import static org.lwjgl.opengl.GL11.glGetError;
+import static org.lwjgl.opengl.GL11.glGetString;
+import static org.lwjgl.opengl.GL11.glHint;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import org.joml.Matrix4f;
 import org.lwjgl.Version;
@@ -20,8 +59,10 @@ import guis.SetupScreen;
 import guis.TitleScreen;
 import objects.Line;
 import objects.Map;
+import objects.Pawn;
 import objects.Point;
 import objects.Rect;
+import util.Animator;
 import util.Camera;
 import util.ClickListener;
 import util.Cursors;
@@ -42,6 +83,7 @@ public class Game {
 	public static Matrix4f projSave = new Matrix4f(); // projection matrix to save the initial state
 	public static final Camera nullCamera = new Camera(0, 0); // null camera doesn't change and is mostly for rendering UIs
 	public static Map map;
+	public static List<Pawn> pawns = new ArrayList<>(); // list of pawns who are playing the game. TODO make Player which encompasses pawns and cards and everything else
 	
 	public static void main(String[] args) {
 		Log.log("LWJGL version " + Version.getVersion());
@@ -88,12 +130,15 @@ public class Game {
 			}
 		});
 		glfwSetMouseButtonCallback(window, (window, button, action, mods) -> {
-			if(action == GLFW_PRESS)
-				for(ClickListener listener : ClickListener.getCallbackList(mode))
-					listener.handleClick(button);
-			else if(action == GLFW_RELEASE)
-				for(ClickListener listener : ClickListener.getCallbackList(mode))
-					listener.handleRelease(button);
+			if(action == GLFW_PRESS) {
+				List<ClickListener> clickList = ClickListener.getCallbackList(mode);
+				for(int i = clickList.size() - 1; i >= 0; i--) // loop backwards to avoid concurrent modification
+					clickList.get(i).handleClick(button);
+			} else if(action == GLFW_RELEASE) {
+				List<ClickListener> clickList = ClickListener.getCallbackList(mode);
+				for(int i = clickList.size() - 1; i >= 0; i--)
+					clickList.get(i).handleRelease(button);
+			}
 		});
 
 		// Make the OpenGL context current
@@ -202,7 +247,8 @@ public class Game {
 	public static void updateGame() {
 		Mouse.getUpdate(); // poll mouse movement
 		glfwPollEvents(); // poll keypress/click events
-		Music.update(); // make sure music is update 
+		Music.update(); // make sure music is update
+		Animator.update(); // update MovingObject animations
 		
 		switch(mode) {
 		case PAUSED: // in play mode, but paused
