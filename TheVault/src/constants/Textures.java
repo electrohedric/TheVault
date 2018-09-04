@@ -20,7 +20,10 @@ public class Textures {
 	}
 	
 	public static void init() {
-		devNull = new Texture("devnull.png");
+		Texture.setLocalPath("misc/");
+			devNull = new Texture("devnull.png");
+			addTexture("haze_purple");
+			addTexture("haze_aqua");
 		Texture.setLocalPath("pieces/");
 			addTexture("pawn_red");
 			addTexture("pawn_blue");

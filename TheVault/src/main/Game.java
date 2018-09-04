@@ -69,6 +69,7 @@ import util.Cursors;
 import util.Log;
 import util.Mouse;
 import util.Music;
+import util.PawnHandler;
 
 public class Game {
 
@@ -84,6 +85,7 @@ public class Game {
 	public static final Camera nullCamera = new Camera(0, 0); // null camera doesn't change and is mostly for rendering UIs
 	public static Map map;
 	public static List<Pawn> pawns = new ArrayList<>(); // list of pawns who are playing the game. TODO make Player which encompasses pawns and cards and everything else
+	public static PawnHandler pawnHandler = PawnHandler.getInstance();
 	
 	public static void main(String[] args) {
 		Log.log("LWJGL version " + Version.getVersion());

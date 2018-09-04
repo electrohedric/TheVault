@@ -8,8 +8,10 @@ import constants.Textures;
 import gl.Texture;
 import guis.elements.Button;
 import main.Game;
+import objects.GameObject;
 import objects.Pawn;
 import objects.Pawn.Color;
+import objects.Tile;
 import util.Animator;
 import util.ClickListener;
 import util.Log;
@@ -18,18 +20,25 @@ import util.Mouse;
 public class SetupScreen extends Gui implements ClickListener {
 	
 	private static SetupScreen instance;
+	
 	private List<Button> elements_pawnSelection;
 	private List<Button> elements_placement;
 	private float pawnFinalY;
 	private float pawnInitialY;
 	private SetupMode setupMode;
+	
 	/** Easy recognition for which pawns to add **/
 	private List<String> pawnStringsChosen;
 	/** Buttons that need to animate on placement mode **/
 	private List<Button> pawnButtonsChosen;
 	private float halfDistance;
+	private GameObject[] possibleSquares;
 	
+	//  FIXME add a start game button from placement screen
+	
+	/** red background for pawns that are not included **/
 	private Plane outPlane;
+	/** green background for pawns that are included **/
 	private Plane inPlane;
 	
 	private SetupScreen() {
@@ -39,6 +48,7 @@ public class SetupScreen extends Gui implements ClickListener {
 		this.elements_placement = new ArrayList<>();
 		this.pawnStringsChosen = new ArrayList<>();
 		this.pawnButtonsChosen = new ArrayList<>();
+		this.possibleSquares = new GameObject[4];
 		
 		this.pawnFinalY = Game.HEIGHT * 0.5f; // down position
 		this.setupMode = SetupMode.PAWN_SELECTION;
@@ -116,6 +126,19 @@ public class SetupScreen extends Gui implements ClickListener {
 				b.enable();
 		}));
 		
+		Tile t;
+		float tileScale = (Game.map.getTileSize() * 1.5f) / Game.HEIGHT; // haze scale is 1.5 tile size
+		t = Game.map.getTileAt(7, 10);
+		possibleSquares[0] = new GameObject(t.getPosX(), t.getPosY(), 0, tileScale); // add all the purple hazes here so they know where they can place their pieces
+		t = Game.map.getTileAt(7, 4);
+		possibleSquares[1] = new GameObject(t.getPosX(), t.getPosY(), 0, tileScale);
+		t = Game.map.getTileAt(4, 7);
+		possibleSquares[2] = new GameObject(t.getPosX(), t.getPosY(), 0, tileScale);
+		t = Game.map.getTileAt(10, 7);
+		possibleSquares[3] = new GameObject(t.getPosX(), t.getPosY(), 0, tileScale);
+		for(GameObject haze : possibleSquares)
+			haze.setActiveTexture(Textures.get("haze_purple"));
+		
 		// add red and green rects
 		outPlane = new Plane((pawnButtonLeftX + pawnButtonRightX) / 2, pawnInitialY, Game.WIDTH, (pawnButtonSize + 0.05f) * Game.HEIGHT, 117, 0, 0, 127);
 		inPlane = new Plane((pawnButtonLeftX + pawnButtonRightX) / 2, pawnFinalY, Game.WIDTH, (pawnButtonSize + 0.05f) * Game.HEIGHT, 0, 117, 0, 127);
@@ -179,6 +202,8 @@ public class SetupScreen extends Gui implements ClickListener {
 		case PLACEMENT:
 			super.renderBackground();
 			Game.map.render();
+			for(GameObject haze : possibleSquares)
+				haze.render(Game.map.getCamera());
 			super.renderElements();
 			for(Pawn p : Game.pawns)
 				p.render();
