@@ -2,16 +2,15 @@ package guis;
 
 import constants.Mode;
 import constants.Textures;
-import gl.Texture;
 import main.Game;
-import util.Animation;
+import objects.Pawn;
 
 public class PlayScreen extends Gui {
 	
 	private static PlayScreen instance;
 	
-	public PlayScreen(Texture background) {
-		super(background);
+	public PlayScreen() {
+		super(Textures.get("shaded"));
 		
 		instance = this;
 	}
@@ -20,29 +19,35 @@ public class PlayScreen extends Gui {
 		if(instance != null)
 			return instance;
 		else
-			return new PlayScreen(Textures.get("shaded"));
+			return new PlayScreen();
 	}
 
 	@Override
 	public void switchTo() {
 		Game.mode = Mode.PLAY;
+		for(Pawn p : Game.pawns) // disable all pawns initially 
+			p.setGrabable(false);
 	}
 	
 	@Override
 	public void update() {
-		PlayScreen.getInstance().update();
-		for(int i = Animation.queue.size() - 1; i >= 0; i--)
-			Animation.queue.get(i).update();
+		
 	}
 	
 	@Override
 	public void render() {
-		
+		super.renderBackground();
+		Game.map.render();
+		super.renderElements();
+		for(Pawn p : Game.pawns)
+			p.render();
 	}
 	
-	public void loadMap() {
-		
+	/**
+	 * Highlighs squares the current player can move to
+	 */
+	public void highlightMoveableSquares() {
+		// TODO
 	}
 	
-
 }

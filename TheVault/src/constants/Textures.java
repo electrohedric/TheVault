@@ -37,6 +37,7 @@ public class Textures {
 			addTexture("button_continue");
 			addTexture("button_next");
 			addTexture("button_back");
+			addTexture("button_startgame");
 	}
 	
 	public static void destroy() {

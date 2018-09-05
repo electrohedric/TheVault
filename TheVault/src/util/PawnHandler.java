@@ -5,6 +5,9 @@ import main.Game;
 import objects.Pawn;
 import objects.Tile;
 
+/**
+ * Class to handle clicks for all pawns in all needed modes
+ */
 public class PawnHandler implements ClickListener {
 
 	public static PawnHandler instance;
@@ -23,14 +26,6 @@ public class PawnHandler implements ClickListener {
 			return new PawnHandler();
 	}
 	
-	public void handlePawnPlaced(Pawn p, Tile t) {
-		
-	}
-	
-	public void handlePawnRemoved(Pawn p, Tile t) {
-		
-	}
-
 	@Override
 	public void handleClick(int button) {
 		for(Pawn p : Game.pawns) {

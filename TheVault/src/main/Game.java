@@ -70,6 +70,7 @@ import util.Log;
 import util.Mouse;
 import util.Music;
 import util.PawnHandler;
+import util.TurnHandler;
 
 public class Game {
 
@@ -172,6 +173,8 @@ public class Game {
 		Rect.init();
 		Line.init();
 		Point.init();
+		Log.log("Loading the rest");
+		TurnHandler.init();
 		proj = new Matrix4f().ortho(0, Game.WIDTH, 0, Game.HEIGHT, -1.0f, 1.0f);
 		projSave = new Matrix4f(proj);
 		map = new Map("map", Game.WIDTH * 0.5f, Game.HEIGHT * 0.5f);
