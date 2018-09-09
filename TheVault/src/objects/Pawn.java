@@ -6,6 +6,7 @@ import guis.SetupScreen;
 import main.Game;
 import util.Animator;
 import util.Mouse;
+import util.TurnHandler;
 
 /**
  * This Game's equivalent of a Player
@@ -81,7 +82,6 @@ public class Pawn extends GameObject {
 	}
 	
 	public void placeOnTile(Tile t) {
-		
 		switch(Game.mode) {
 		case PLAY:
 			//FIXME next set an order of players so one player at a time can move
@@ -102,6 +102,7 @@ public class Pawn extends GameObject {
 						return; // found another pawn on this tile. no good
 				}
 			} else return;
+			TurnHandler.turnOrder.add(this);
 			break;
 		default:
 			break;
@@ -119,7 +120,7 @@ public class Pawn extends GameObject {
 			// TODO when they pick up a pawn, a ghost is placed where their pawn was
 			break;
 		case SETUP:
-			// FIXME remove from place order list
+			TurnHandler.turnOrder.remove(this);
 			break;
 		default:
 			break;
