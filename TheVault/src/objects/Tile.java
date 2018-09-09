@@ -52,7 +52,7 @@ public class Tile {
 	
 	@Override
 	public String toString() {
-		return "Tile: type=" + type;
+		return String.format("Tile: type=%s, grid=(%d, %d)", type, getGridX(), getGridY());
 	}
 	
 }

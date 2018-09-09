@@ -39,7 +39,7 @@ public class MovingObject {
 		public boolean update() {
 			switch(animateType) {
 			case BELL:
-				// TODO implement if needed
+				// XXX implement if needed
 				break;
 			case LERP:
 				float distX = destX - object.x;
@@ -53,7 +53,7 @@ public class MovingObject {
 				object.y += distY * k[0];
 				return false;
 			case LINEAR:
-				// TODO implement if needed
+				// XXX implement if needed
 				break;
 			default:
 				break;

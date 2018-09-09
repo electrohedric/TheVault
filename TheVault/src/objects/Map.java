@@ -141,6 +141,12 @@ public class Map {
 		return camera;
 	}
 	
+	public GameObject createHighlight(Tile t, Surface texture) {
+		GameObject haze = new GameObject(t.getPosX(), t.getPosY(), 0.0f, SQUARE_SIZE * 1.8f / Game.HEIGHT); // haze scale is 1.5 tile size);
+		haze.setActiveTexture(texture);
+		return haze;
+	}
+	
 	public void setCenter(float x, float y) {
 		camera.x = -x;
 		camera.y = -y;

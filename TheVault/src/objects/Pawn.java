@@ -2,11 +2,12 @@ package objects;
 
 import constants.Textures;
 import gl.Texture;
+import guis.PlayScreen;
 import guis.SetupScreen;
 import main.Game;
 import util.Animator;
 import util.Mouse;
-import util.TurnHandler;
+import util.PawnHandler;
 
 /**
  * This Game's equivalent of a Player
@@ -18,6 +19,7 @@ public class Pawn extends GameObject {
 	private Color color;
 	private Tile onTile;
 	private GameObject ghost;
+	// TODO add cards
 	
 	// these are all properties of the pawn per turn
 	private int movesPerTurn;
@@ -68,6 +70,14 @@ public class Pawn extends GameObject {
 		return onTile;
 	}
 	
+	public int getMovesLeft() {
+		return movesLeft;
+	}
+
+	public int getActionsLeft() {
+		return actionsLeft;
+	}
+
 	@Override
 	public void render() {
 		super.render();
@@ -75,16 +85,25 @@ public class Pawn extends GameObject {
 			ghost.render();
 	}
 	
+	/**
+	 * Should be called when the turn is about to begin to reset for play
+	 */
 	public void resetTurn() {
 		movesLeft = movesPerTurn;
 		actionsLeft = actionsPerTurn;
-		// TODO create squares they can move to are highlighted using recursion on surrounding squares
+		setGrabable(true);
+		PawnHandler.getInstance().calculateMoveableTiles();
+		// TODO some display that lets people know it's their turn
+	}
+	
+	public void finishTurn() {
+		setGrabable(false);
 	}
 	
 	public void placeOnTile(Tile t) {
 		switch(Game.mode) {
 		case PLAY:
-			//FIXME next set an order of players so one player at a time can move
+			
 			break;
 		case SETUP:
 			// check if t is one of the starting tiles
@@ -102,7 +121,7 @@ public class Pawn extends GameObject {
 						return; // found another pawn on this tile. no good
 				}
 			} else return;
-			TurnHandler.turnOrder.add(this);
+			PawnHandler.getInstance().turnOrder.add(0, this); // insert at the beginnning to do a live reverse
 			break;
 		default:
 			break;
@@ -120,7 +139,7 @@ public class Pawn extends GameObject {
 			// TODO when they pick up a pawn, a ghost is placed where their pawn was
 			break;
 		case SETUP:
-			TurnHandler.turnOrder.remove(this);
+			PawnHandler.getInstance().turnOrder.remove(this);
 			break;
 		default:
 			break;
@@ -128,7 +147,12 @@ public class Pawn extends GameObject {
 		onTile = null;
 	}
 	
-	public static enum Color {		
+	@Override
+	public String toString() {
+		return String.format("Pawn: color=%s, tile=[%s]", color, getTile());
+	}
+	
+	public static enum Color {
 		RED("pawn_red"), GREEN("pawn_green"), BLUE("pawn_blue"), YELLOW("pawn_yellow");
 		
 		private Texture texture;

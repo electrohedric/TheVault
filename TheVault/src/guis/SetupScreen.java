@@ -134,11 +134,9 @@ public class SetupScreen extends Gui {
 			PlayScreen.getInstance().switchTo();
 		}));
 		
-		float tileScale = (Game.map.getTileSize() * 1.8f) / Game.HEIGHT; // haze scale is 1.5 tile size
 		for(int i = 0; i < validStartingTiles.length; i++) {
 			Tile t = validStartingTiles[i];
-			possibleSquares[i] = new GameObject(t.getPosX(), t.getPosY(), 0, tileScale); // add all the purple hazes here so they know where they can place their pieces
-			possibleSquares[i].setActiveTexture(Textures.get("haze_purple"));
+			possibleSquares[i] = Game.map.createHighlight(t, Textures.get("haze_purple")); // add all the purple hazes here so they know where they can place their pieces
 		}
 
 		// add red and green rects

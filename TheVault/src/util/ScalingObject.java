@@ -34,7 +34,7 @@ public class ScalingObject {
 		public boolean update() {
 			switch(animateType) {
 			case BELL:
-				// TODO implement if needed
+				// XXX implement if needed
 				break;
 			case LERP:
 				float distSize = destSize - object.scale;
@@ -45,7 +45,7 @@ public class ScalingObject {
 				object.scale += distSize * k[0];
 				return false;
 			case LINEAR:
-				// TODO implement if needed
+				// XXX implement if needed
 				break;
 			default:
 				break;

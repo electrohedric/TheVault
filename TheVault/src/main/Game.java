@@ -70,7 +70,6 @@ import util.Log;
 import util.Mouse;
 import util.Music;
 import util.PawnHandler;
-import util.TurnHandler;
 
 public class Game {
 
@@ -85,8 +84,7 @@ public class Game {
 	public static Matrix4f projSave = new Matrix4f(); // projection matrix to save the initial state
 	public static final Camera nullCamera = new Camera(0, 0); // null camera doesn't change and is mostly for rendering UIs
 	public static Map map;
-	public static List<Pawn> pawns = new ArrayList<>(); // list of pawns who are playing the game. TODO make Player which encompasses pawns and cards and everything else
-	public static PawnHandler pawnHandler = PawnHandler.getInstance();
+	public static List<Pawn> pawns = new ArrayList<>(); // list of pawns who are playing the game.
 	
 	public static void main(String[] args) {
 		Log.log("LWJGL version " + Version.getVersion());
@@ -174,10 +172,10 @@ public class Game {
 		Line.init();
 		Point.init();
 		Log.log("Loading the rest");
-		TurnHandler.init();
 		proj = new Matrix4f().ortho(0, Game.WIDTH, 0, Game.HEIGHT, -1.0f, 1.0f);
 		projSave = new Matrix4f(proj);
 		map = new Map("map", Game.WIDTH * 0.5f, Game.HEIGHT * 0.5f);
+		PawnHandler.getInstance(); // initial load. map must already be loaded
 		
 		// Set the clear color
 		Renderer.setClearColor(0, 0, 0);
