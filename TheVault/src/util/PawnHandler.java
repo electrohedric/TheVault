@@ -47,12 +47,10 @@ public class PawnHandler implements ClickListener {
 	public void handleClick(int button) {
 		for(Pawn p : Game.pawns) {
 			if(p.canGrab() && p.AACollideMouse()) { // if clicked on, grab it
-				if((Game.mode == Mode.PLAY && getPawn() == p) || Game.mode == Mode.SETUP) {
-					p.grabbed = true;
-					p.removeFromTile();
-					return; // max of 1 pawn at a time will be grabbed
-					// TODO make this grab the closest pawn to it and possibly bring it the front of the rendering
-				}
+				p.grabbed = true;
+				p.removeFromTile();
+				return; // max of 1 pawn at a time will be grabbed
+				// TODO make this grab the closest pawn to it and possibly bring it the front of the rendering
 			}
 		}
 	}
@@ -94,17 +92,16 @@ public class PawnHandler implements ClickListener {
 	 */
 	private void setMoveableSurrounding(Tile tile, int d) {
 		if(d > 1) {
-			d -= 1;
 			int currentX = tile.getGridX();
 			int currentY = tile.getGridY();
 			for(int y = currentY - 1; y <= currentY + 1; y++) { // 3x3 box with this tile at the center
 				for(int x = currentX - 1; x <= currentX + 1; x++) {
 					Tile t = Game.map.getTileAt(x, y);
-					if(!visited[y][x] && t.getType() != Square.NONE) { // but make sure we can move there and its not a tile we've visited
+					if(t != null && !visited[y][x] && possibleMove(t)) { // but make sure we can move there and its not a tile we've visited
 						visited[y][x] = true; // visit the cell
 						moveableTiles.add(t);
 						highlights.add(Game.map.createHighlight(t, Textures.get("haze_aqua")));
-						setMoveableSurrounding(t, d); // recurse from this tile with the distance left // FIXME test all this please!
+						setMoveableSurrounding(t, d - 1); // recurse from this tile with the distance left
 					}
 				}
 			}
@@ -119,13 +116,37 @@ public class PawnHandler implements ClickListener {
 			}
 		}
 		moveableTiles.clear();
+		highlights.clear();
 		setMoveableSurrounding(getPawn().getTile(), getPawn().getMovesLeft());
 		
+	}
+	
+	/**
+	 * Determines whether or not this tile could theoretically be moved to.
+	 * @param t Tile to test movement to
+	 * @return <code>true</code> if the tile is not NONE and no other player is standing on that tile.
+	 */
+	private boolean possibleMove(Tile t) {
+		Pawn currentPawn = getPawn();
+		for(Pawn p : Game.pawns)
+			if(p.getTile() == t && p != currentPawn)
+				return false;
+		return t.getType() != Square.NONE;
 	}
 	
 	public boolean canMoveThere(Tile t) {
 		for(Tile canMove : moveableTiles)
 			if(t == canMove) return true; // if the tile is in moveable, then yes, they can move there.
 		return false;
+	}
+	
+	public void renderPawns() {
+		for(Pawn p : Game.pawns)
+			p.render();
+	}
+	
+	public void renderMoveableTileHighlights() {
+		for(GameObject highlight : highlights)
+			highlight.render();
 	}
 }

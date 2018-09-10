@@ -64,8 +64,8 @@ public class Map {
 			int b = store[i + 2];
 			// (we dont care about alpha)
 			int color = (r << 020) | (g << 010) | b; // merge into a single color so it's easier to check
-			int gx = i % width;
-			int gy = i / width;
+			int gx = index % width;
+			int gy = index / width;
 			
 			switch(color) {
 			case 0xFFFFFF: // white
@@ -108,10 +108,14 @@ public class Map {
 	}
 	
 	public Tile getTileAt(int x, int y) {
-		return tiles[y * width + x];
+		if(x < 0 || x >= width || y < 0 || y >= height) // we dont have a tile at that position if its outside these bounds
+			return null;
+		else
+			return tiles[y * width + x];
 	}
 	
 	public Tile getTileAtMouse() {
+		// offset mouse to map top left
 		int mouseX = camera.getMouseX() + TOTAL_WIDTH / 2;
 		int mouseY = TOTAL_HEIGHT / 2 - camera.getMouseY();
 		
@@ -142,7 +146,7 @@ public class Map {
 	}
 	
 	public GameObject createHighlight(Tile t, Surface texture) {
-		GameObject haze = new GameObject(t.getPosX(), t.getPosY(), 0.0f, SQUARE_SIZE * 1.8f / Game.HEIGHT); // haze scale is 1.5 tile size);
+		GameObject haze = new GameObject(t.getAbsoluteX(camera), t.getAbsoluteY(camera), 0.0f, SQUARE_SIZE * 1.8f / Game.HEIGHT); // haze scale is 1.5 tile size);
 		haze.setActiveTexture(texture);
 		return haze;
 	}

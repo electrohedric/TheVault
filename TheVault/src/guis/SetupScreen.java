@@ -206,7 +206,7 @@ public class SetupScreen extends Gui {
 			super.renderBackground();
 			Game.map.render();
 			for(GameObject haze : possibleSquares)
-				haze.render(Game.map.getCamera());
+				haze.render();
 			super.renderElements();
 			for(Pawn p : Game.pawns)
 				p.render();

@@ -1,8 +1,8 @@
 package objects;
 
+import constants.Mode;
 import constants.Textures;
 import gl.Texture;
-import guis.PlayScreen;
 import guis.SetupScreen;
 import main.Game;
 import util.Animator;
@@ -36,7 +36,8 @@ public class Pawn extends GameObject {
 		this.color = color;
 		this.onTile = null;
 		setActiveTexture(color.texture);
-		this.ghost = null;
+		this.ghost = new GameObject(0, 0, 0, 0); // not ready for rendering yet until resetTurn
+		ghost.setActiveTexture(color.texture); // TODO instead of scaling down, decrease alpha
 		
 		this.movesPerTurn = 3;
 		this.actionsPerTurn = 2;
@@ -80,9 +81,16 @@ public class Pawn extends GameObject {
 
 	@Override
 	public void render() {
-		super.render();
-		if(ghost != null)
+		if(grabbed && Game.mode == Mode.PLAY) {
+			PawnHandler.getInstance().renderMoveableTileHighlights();
 			ghost.render();
+		}
+		super.render(); // render the pawn after the ghost after the highlights
+	}
+	
+	private void setGhostHere() {
+		ghost.x = onTile.getAbsoluteX(Game.map.getCamera());
+		ghost.y = onTile.getAbsoluteY(Game.map.getCamera());
 	}
 	
 	/**
@@ -93,6 +101,8 @@ public class Pawn extends GameObject {
 		actionsLeft = actionsPerTurn;
 		setGrabable(true);
 		PawnHandler.getInstance().calculateMoveableTiles();
+		setGhostHere();
+		ghost.scale = scale * 0.8f; // can't do this in constructor because they move and resize
 		// TODO some display that lets people know it's their turn
 	}
 	
@@ -103,7 +113,9 @@ public class Pawn extends GameObject {
 	public void placeOnTile(Tile t) {
 		switch(Game.mode) {
 		case PLAY:
-			
+			if(PawnHandler.getInstance().canMoveThere(t)) {
+				// TODO something when you place it there. but only remove movement turns until after they draw a card
+			} else return;
 			break;
 		case SETUP:
 			// check if t is one of the starting tiles
@@ -145,6 +157,10 @@ public class Pawn extends GameObject {
 			break;
 		}
 		onTile = null;
+	}
+	
+	public GameObject getGhost() {
+		return ghost;
 	}
 	
 	@Override
