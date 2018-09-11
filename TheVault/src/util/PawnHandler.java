@@ -91,17 +91,19 @@ public class PawnHandler implements ClickListener {
 	 * @param d Distance left. 0 means no surrounding tiles will be added, only the current tile
 	 */
 	private void setMoveableSurrounding(Tile tile, int d) {
-		if(d > 1) {
+		if(d > 0) {
 			int currentX = tile.getGridX();
 			int currentY = tile.getGridY();
 			for(int y = currentY - 1; y <= currentY + 1; y++) { // 3x3 box with this tile at the center
 				for(int x = currentX - 1; x <= currentX + 1; x++) {
 					Tile t = Game.map.getTileAt(x, y);
-					if(t != null && !visited[y][x] && possibleMove(t)) { // but make sure we can move there and its not a tile we've visited
-						visited[y][x] = true; // visit the cell
-						moveableTiles.add(t);
-						highlights.add(Game.map.createHighlight(t, Textures.get("haze_aqua")));
-						setMoveableSurrounding(t, d - 1); // recurse from this tile with the distance left
+					if(t != null) { // but make sure we can move there and its not a tile we've visited
+						if(!visited[y][x] && possibleMove(t)) {
+							visited[y][x] = true; // visit the cell
+							moveableTiles.add(t);
+							highlights.add(Game.map.createHighlight(t, Textures.get("haze_aqua")));
+						}
+						setMoveableSurrounding(t, d - 1); // recurse from this tile with the distance left, only if not null
 					}
 				}
 			}

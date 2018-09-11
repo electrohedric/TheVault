@@ -1,8 +1,10 @@
 package objects;
 
 import constants.Mode;
+import constants.Sounds;
 import constants.Textures;
 import gl.Texture;
+import guis.PlayScreen;
 import guis.SetupScreen;
 import main.Game;
 import util.Animator;
@@ -103,18 +105,21 @@ public class Pawn extends GameObject {
 		PawnHandler.getInstance().calculateMoveableTiles();
 		setGhostHere();
 		ghost.scale = scale * 0.8f; // can't do this in constructor because they move and resize
+		PlayScreen.getInstance().showCorrespondingButton(onTile); // reshow the tile if they're on one
 		// TODO some display that lets people know it's their turn
 	}
 	
 	public void finishTurn() {
 		setGrabable(false);
+		PlayScreen.getInstance().hideActionButtons();
 	}
 	
 	public void placeOnTile(Tile t) {
 		switch(Game.mode) {
 		case PLAY:
 			if(PawnHandler.getInstance().canMoveThere(t)) {
-				// TODO something when you place it there. but only remove movement turns until after they draw a card
+				PlayScreen.getInstance().showCorrespondingButton(t);
+				PlayScreen.getInstance().getDoneButton().enable();
 			} else return;
 			break;
 		case SETUP:
@@ -148,7 +153,8 @@ public class Pawn extends GameObject {
 	public void removeFromTile() {
 		switch(Game.mode) {
 		case PLAY:
-			// TODO when they pick up a pawn, a ghost is placed where their pawn was
+			PlayScreen.getInstance().hideActionButtons();
+			PlayScreen.getInstance().getDoneButton().disable();
 			break;
 		case SETUP:
 			PawnHandler.getInstance().turnOrder.remove(this);

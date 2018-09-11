@@ -38,6 +38,10 @@ public class Textures {
 			addTexture("button_next");
 			addTexture("button_back");
 			addTexture("button_startgame");
+			addTexture("button_drawconsumable");
+			addTexture("button_drawgem");
+			addTexture("button_useforge");
+			addTexture("button_endturn");
 	}
 	
 	public static void destroy() {
