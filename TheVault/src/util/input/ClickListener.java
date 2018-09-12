@@ -1,4 +1,4 @@
-package util;
+package util.input;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -9,7 +9,7 @@ import constants.Shaders;
 import gl.Shader;
 import main.Game;
 import objects.Point;
-import util.Camera;
+import util.handling.Camera;
 
 public class Dot {
 	

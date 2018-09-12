@@ -1,4 +1,4 @@
-package util;
+package util.animation;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -8,6 +8,7 @@ import constants.Resources;
 import gl.Texture;
 import main.Game;
 import objects.Surface;
+import util.output.Log;
 
 public class Animation extends Surface {
 	

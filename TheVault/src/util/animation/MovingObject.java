@@ -1,6 +1,6 @@
-package util;
+package util.animation;
 import objects.GameObject;
-import util.Animator.AnimateType;
+import util.animation.Animator.AnimateType;
 
 public class MovingObject {
 		

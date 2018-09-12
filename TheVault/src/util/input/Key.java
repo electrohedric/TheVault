@@ -1,4 +1,4 @@
-package util;
+package util.input;
 
 import static org.lwjgl.glfw.GLFW.*;
 

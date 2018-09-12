@@ -2,7 +2,7 @@ package objects;
 
 import guis.Plane;
 import objects.Map.Square;
-import util.Camera;
+import util.handling.Camera;
 
 public class Tile {
 

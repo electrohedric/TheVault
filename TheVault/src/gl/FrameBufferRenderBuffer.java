@@ -11,7 +11,7 @@ import org.joml.Matrix4f;
 import org.lwjgl.BufferUtils;
 
 import main.Game;
-import util.Log;
+import util.output.Log;
 
 public class FrameBufferRenderBuffer {
 

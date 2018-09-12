@@ -7,9 +7,9 @@ import org.joml.Matrix4f;
 import constants.Shaders;
 import gl.Shader;
 import main.Game;
-import util.Camera;
-import util.Collision;
-import util.Mouse;
+import util.handling.Camera;
+import util.handling.Collision;
+import util.input.Mouse;
 
 // TODO this should probably be abstract eventually
 public class GameObject {

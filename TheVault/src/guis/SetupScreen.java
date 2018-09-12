@@ -12,8 +12,8 @@ import objects.GameObject;
 import objects.Pawn;
 import objects.Pawn.Color;
 import objects.Tile;
-import util.Animator;
-import util.Log;
+import util.animation.Animator;
+import util.output.Log;
 
 public class SetupScreen extends Gui {
 	

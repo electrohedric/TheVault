@@ -1,4 +1,4 @@
-package util;
+package util.handling;
 
 import objects.GameObject;
 

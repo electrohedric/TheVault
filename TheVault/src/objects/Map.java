@@ -9,8 +9,8 @@ import javax.imageio.ImageIO;
 import constants.Resources;
 import guis.Plane;
 import main.Game;
-import util.Camera;
-import util.Log;
+import util.handling.Camera;
+import util.output.Log;
 
 public class Map {
 	

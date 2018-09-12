@@ -12,8 +12,8 @@ import org.lwjgl.openal.AL;
 import org.lwjgl.openal.ALC;
 import org.lwjgl.openal.ALCCapabilities;
 
-import util.Log;
-import util.Sound;
+import util.output.Log;
+import util.output.Sound;
 
 public class Sounds {
 	

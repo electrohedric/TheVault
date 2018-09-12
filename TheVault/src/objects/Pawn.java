@@ -7,9 +7,9 @@ import gl.Texture;
 import guis.PlayScreen;
 import guis.SetupScreen;
 import main.Game;
-import util.Animator;
-import util.Mouse;
-import util.PawnHandler;
+import util.animation.Animator;
+import util.handling.PawnHandler;
+import util.input.Mouse;
 
 /**
  * This Game's equivalent of a Player

@@ -6,8 +6,8 @@ import guis.elements.Button;
 import main.Game;
 import objects.Pawn;
 import objects.Tile;
-import util.Log;
-import util.PawnHandler;
+import util.handling.PawnHandler;
+import util.output.Log;
 
 public class PlayScreen extends Gui {
 	

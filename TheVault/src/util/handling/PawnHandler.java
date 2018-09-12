@@ -1,4 +1,4 @@
-package util;
+package util.handling;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,6 +8,7 @@ import constants.Textures;
 import main.Game;
 import objects.GameObject;
 import objects.Map.Square;
+import util.input.ClickListener;
 import objects.Pawn;
 import objects.Tile;
 

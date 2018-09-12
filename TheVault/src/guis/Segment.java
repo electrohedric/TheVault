@@ -10,7 +10,7 @@ import constants.Shaders;
 import gl.Shader;
 import main.Game;
 import objects.Line;
-import util.Camera;
+import util.handling.Camera;
 
 //TODO make this implement a Renderable class which has the matrices, program, slot, x, and y set up, and render() abstract method
 public class Segment {

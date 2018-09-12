@@ -3,12 +3,13 @@ package guis;
 import java.util.ArrayList;
 import java.util.List;
 
+import constants.Cursors;
+
 import static org.lwjgl.glfw.GLFW.*;
 
 import gl.Texture;
 import guis.elements.Button;
 import main.Game;
-import util.Cursors;
 
 public abstract class Gui {
 
