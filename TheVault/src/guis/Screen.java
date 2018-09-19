@@ -1,6 +1,6 @@
 package guis;
 
-import main.Game;
+import main.Main;
 import objects.GameObject;
 import objects.Surface;
 
@@ -12,7 +12,7 @@ public class Screen extends GameObject {
 	}
 	
 	public Screen(Surface texture) {
-		this(texture, Game.WIDTH / 2, Game.HEIGHT / 2, 1.0f);
+		this(texture, Main.WIDTH / 2, Main.HEIGHT / 2, 1.0f);
 	}
 	
 }

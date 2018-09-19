@@ -15,8 +15,8 @@ import org.lwjgl.BufferUtils;
 
 import constants.Resources;
 import constants.Textures;
+import io.Log;
 import objects.Surface;
-import util.output.Log;
 
 public class Texture extends Surface {
 	

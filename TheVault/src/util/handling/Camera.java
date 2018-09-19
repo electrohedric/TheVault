@@ -1,6 +1,6 @@
 package util.handling;
 
-import util.input.Mouse;
+import io.Mouse;
 
 public class Camera {
 	

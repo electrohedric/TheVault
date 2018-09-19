@@ -1,12 +1,12 @@
-package util.input;
+package io;
 
 import static org.lwjgl.glfw.GLFW.*;
 
-import main.Game;
+import main.Main;
 
 public class Key {
 	
 	public static boolean down(int key) {
-		return glfwGetKey(Game.window, key) == 1;
+		return glfwGetKey(Main.window, key) == 1;
 	}
 }

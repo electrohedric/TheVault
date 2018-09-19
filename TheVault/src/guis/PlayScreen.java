@@ -3,11 +3,11 @@ package guis;
 import constants.Mode;
 import constants.Textures;
 import guis.elements.Button;
-import main.Game;
+import io.Log;
+import main.Main;
 import objects.Pawn;
 import objects.Tile;
 import util.handling.PawnHandler;
-import util.output.Log;
 
 public class PlayScreen extends Gui {
 	
@@ -24,8 +24,8 @@ public class PlayScreen extends Gui {
 	public PlayScreen() {
 		super(Textures.get("shaded"));
 		
-		int actionBX = (int) (Game.WIDTH * 0.13f);
-		int actionBY = (int) (Game.HEIGHT * 0.85f);
+		int actionBX = (int) (Main.WIDTH * 0.13f);
+		int actionBY = (int) (Main.HEIGHT * 0.85f);
 		float actionBScale = 0.25f;
 		this.consumableButton = new Button(actionBX, actionBY, actionBScale, Textures.get("button_drawconsumable"), Mode.PLAY, true, () -> {
 			// TODO add cards here
@@ -36,7 +36,7 @@ public class PlayScreen extends Gui {
 		this.gemButton = new Button(actionBX, actionBY, actionBScale, Textures.get("button_drawgem"), Mode.PLAY, true, () -> {
 			
 		});
-		this.doneButton = new Button(Game.WIDTH * 0.88f, Game.HEIGHT * 0.1f, 0.15f, Textures.get("button_endturn"), Mode.PLAY, true, () -> {
+		this.doneButton = new Button(Main.WIDTH * 0.88f, Main.HEIGHT * 0.1f, 0.15f, Textures.get("button_endturn"), Mode.PLAY, true, () -> {
 			PawnHandler.getInstance().nextTurn();
 		});
 		consumableButton.disable();
@@ -54,15 +54,15 @@ public class PlayScreen extends Gui {
 
 	@Override
 	public void switchTo() {
-		Game.mode = Mode.PLAY;
-		for(Pawn p : Game.pawns) // disable all pawns initially 
+		Main.mode = Mode.PLAY;
+		for(Pawn p : Main.pawns) // disable all pawns initially 
 			p.setGrabable(false);
 		PawnHandler.getInstance().getPawn().resetTurn(); // enable first pawn to act
 	}
 	
 	@Override
 	public void update() {
-		for(Pawn p : Game.pawns)
+		for(Pawn p : Main.pawns)
 			p.update();
 		consumableButton.update();
 		forgeButton.update();
@@ -124,7 +124,7 @@ public class PlayScreen extends Gui {
 	@Override
 	public void render() {
 		super.renderBackground();
-		Game.map.render();
+		Main.map.render();
 		PawnHandler.getInstance().renderPawns();
 		conditionalRender(consumableButton); // render only if they are enabled, making it easy to see what's available
 		conditionalRender(forgeButton);

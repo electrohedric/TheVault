@@ -10,8 +10,8 @@ import java.nio.ByteBuffer;
 import org.joml.Matrix4f;
 import org.lwjgl.BufferUtils;
 
-import main.Game;
-import util.output.Log;
+import io.Log;
+import main.Main;
 
 public class FrameBufferRenderBuffer {
 
@@ -80,13 +80,13 @@ public class FrameBufferRenderBuffer {
 	public void activate() {
 		bind();
 		glViewport(0, 0, width, height);
-		Game.proj = fboProj;
+		Main.proj = fboProj;
 	}
 	
 	public void deactivate() {
 		unbind();
-		glViewport(0, 0, Game.WIDTH, Game.HEIGHT);
-		Game.restoreProj();
+		glViewport(0, 0, Main.WIDTH, Main.HEIGHT);
+		Main.restoreProj();
 	}
 
 	public int getWidth() {

@@ -7,7 +7,7 @@ import org.joml.Vector4f;
 
 import constants.Shaders;
 import gl.Shader;
-import main.Game;
+import main.Main;
 import objects.Point;
 import util.handling.Camera;
 
@@ -45,7 +45,7 @@ public class Dot {
 		Point.bind(); // binds the VAO
 		program.set("u_Color", color);
 		// just translate
-		proj.set(Game.proj);
+		proj.set(Main.proj);
 		model = model.translation(x + 0.5f - camera.x, y - camera.y, 0);
 		mvp = proj.mul(model); // M x V x P
 		program.set("u_MVP", mvp);

@@ -6,9 +6,9 @@ import java.util.List;
 
 import constants.Resources;
 import gl.Texture;
-import main.Game;
+import io.Log;
+import main.Main;
 import objects.Surface;
-import util.output.Log;
 
 public class Animation extends Surface {
 	
@@ -93,7 +93,7 @@ public class Animation extends Surface {
 	
 	/** Updates the texture index when the next frame of animation is needed */
 	public void update() {
-		frameElapsedTime += Game.delta;
+		frameElapsedTime += Main.delta;
 		while(frameElapsedTime >= frameDelta && running) { // need to move to the next frame
 			// should, 99% of the time, loop once, but just in case more time has passed, we need to increment the right amount of frames
 			frameElapsedTime -= frameDelta;

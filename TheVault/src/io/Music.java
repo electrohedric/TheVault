@@ -1,8 +1,8 @@
-package util.output;
+package io;
 
 import static org.lwjgl.openal.AL10.*;
 
-import main.Game;
+import main.Main;
 
 public class Music {
 
@@ -100,7 +100,7 @@ public class Music {
 				alSourceQueueBuffers(source, looping);
 		}
 		if(fadeDir != 0) { // need to fade
-			currentFadeTime += Game.delta;
+			currentFadeTime += Main.delta;
 			if(currentFadeTime >= fadeForTime) { // we hit max fade time
 				if(fadeDir > 0) { // just faded in
 					setVolume(Music.mixerVolume);
@@ -117,7 +117,7 @@ public class Music {
 			} else { // change volume
 				float timeLeft = fadeForTime - currentFadeTime;
 				float volumeLeft = fadeDir > 0 ? Music.mixerVolume - volume : volume; // volume left based on fade direction
-				float dvdt = volumeLeft / timeLeft * Game.delta;
+				float dvdt = volumeLeft / timeLeft * Main.delta;
 				setVolume(volume + dvdt * fadeDir);
 			}
 		}

@@ -2,8 +2,8 @@ package guis.elements;
 
 import constants.Mode;
 import gl.Texture;
+import io.ClickListener;
 import objects.GameObject;
-import util.input.ClickListener;
 
 public class Button extends GameObject implements ClickListener {
 

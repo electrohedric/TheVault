@@ -1,8 +1,8 @@
-package util.input;
+package io;
 
 import static org.lwjgl.glfw.GLFW.*;
 
-import main.Game;
+import main.Main;
 
 public class Mouse {
 	
@@ -17,13 +17,13 @@ public class Mouse {
 	public static final int MIDDLE = GLFW_MOUSE_BUTTON_MIDDLE;
 	
 	public static void getUpdate() {
-		glfwGetCursorPos(Game.window, xbuf, ybuf);
+		glfwGetCursorPos(Main.window, xbuf, ybuf);
 		x = (int) xbuf[0];
-		y = (int) (Game.HEIGHT - ybuf[0]);
+		y = (int) (Main.HEIGHT - ybuf[0]);
 	}
 	
 	public boolean isDown(int button) {
-		return glfwGetMouseButton(Game.window, button) == 1;
+		return glfwGetMouseButton(Main.window, button) == 1;
 	}
 	
 }

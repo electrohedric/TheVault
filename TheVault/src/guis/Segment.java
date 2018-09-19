@@ -8,7 +8,7 @@ import org.joml.Vector4f;
 
 import constants.Shaders;
 import gl.Shader;
-import main.Game;
+import main.Main;
 import objects.Line;
 import util.handling.Camera;
 
@@ -72,7 +72,7 @@ public class Segment {
 		Line.bind(); // binds the VAO
 		program.set("u_Color", color);
 		// scale to length, rotate, then translate
-		proj.set(Game.proj);
+		proj.set(Main.proj);
 		model = model.translation(x - camera.x, y - camera.y, 0).rotate(rot, 0.0f, 0.0f, 1.0f).scale(length, length, 1.0f);
 		mvp = proj.mul(model); // M x V x P
 		program.set("u_MVP", mvp);
@@ -84,7 +84,7 @@ public class Segment {
 	 * Renders this segment to the screen using absolute positioning
 	 */
 	public void render() {
-		render(Game.nullCamera);
+		render(Main.nullCamera);
 	}
 	
 	public void setStartPoint(float x1, float y1) {

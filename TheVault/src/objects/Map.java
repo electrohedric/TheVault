@@ -8,9 +8,9 @@ import javax.imageio.ImageIO;
 
 import constants.Resources;
 import guis.Plane;
-import main.Game;
+import io.Log;
+import main.Main;
 import util.handling.Camera;
-import util.output.Log;
 
 public class Map {
 	
@@ -42,8 +42,8 @@ public class Map {
 		image.getData().getPixels(0, 0, image.getWidth(), image.getHeight(), store);
 		this.tiles = new Tile[width * height];
 		
-		this.SPACING = (int) (Game.HEIGHT * 0.005f); // 5 pixels on a 1080p screen
-		this.TOTAL_HEIGHT = (int) (Game.HEIGHT * 0.8f); // 80% of screen
+		this.SPACING = (int) (Main.HEIGHT * 0.005f); // 5 pixels on a 1080p screen
+		this.TOTAL_HEIGHT = (int) (Main.HEIGHT * 0.8f); // 80% of screen
 		this.TOTAL_WIDTH = (int) (TOTAL_HEIGHT * height / width);
 		this.SQUARE_SIZE = (int) ((TOTAL_HEIGHT - (height + 1) * SPACING) / height); // calculate square size to maximize space but contrained to height
 		this.SQUARE_DISTANCE = SPACING + SQUARE_SIZE;
@@ -146,7 +146,7 @@ public class Map {
 	}
 	
 	public GameObject createHighlight(Tile t, Surface texture) {
-		GameObject haze = new GameObject(t.getAbsoluteX(camera), t.getAbsoluteY(camera), 0.0f, SQUARE_SIZE * 1.8f / Game.HEIGHT); // haze scale is 1.5 tile size);
+		GameObject haze = new GameObject(t.getAbsoluteX(camera), t.getAbsoluteY(camera), 0.0f, SQUARE_SIZE * 1.8f / Main.HEIGHT); // haze scale is 1.5 tile size);
 		haze.setActiveTexture(texture);
 		return haze;
 	}

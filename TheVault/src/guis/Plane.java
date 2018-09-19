@@ -7,7 +7,7 @@ import org.joml.Vector4f;
 
 import constants.Shaders;
 import gl.Shader;
-import main.Game;
+import main.Main;
 import objects.Rect;
 import util.handling.Camera;
 
@@ -73,7 +73,7 @@ public class Plane {
 		Rect.bind(); // binds the VAO
 		program.set("u_Color", color);
 		// scale to length, rotate, then translate
-		proj.set(Game.proj);
+		proj.set(Main.proj);
 		model = model.translation(cx - camera.x, cy - camera.y, 0).scale(width, height, 1.0f);
 		mvp = proj.mul(model); // M x V x P
 		program.set("u_MVP", mvp);
@@ -84,7 +84,7 @@ public class Plane {
 	 * Renders this segment to the screen using absolute positioning
 	 */
 	public void render() {
-		render(Game.nullCamera);
+		render(Main.nullCamera);
 	}
 	
 	public float getWidth() {

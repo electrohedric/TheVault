@@ -6,8 +6,8 @@ import java.util.List;
 import java.util.Map;
 
 import gl.Texture;
+import io.Log;
 import objects.Surface;
-import util.output.Log;
 
 public class Textures {
 	

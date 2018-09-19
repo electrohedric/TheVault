@@ -1,4 +1,4 @@
-package util.output;
+package io;
 
 import static org.lwjgl.openal.AL10.*;
 

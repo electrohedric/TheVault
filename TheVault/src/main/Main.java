@@ -22,6 +22,11 @@ import gl.Renderer;
 import guis.PlayScreen;
 import guis.SetupScreen;
 import guis.TitleScreen;
+import io.ClickListener;
+import io.Log;
+import io.Mouse;
+import io.Music;
+import io.SocketConnection;
 import objects.Line;
 import objects.Map;
 import objects.Pawn;
@@ -30,12 +35,8 @@ import objects.Rect;
 import util.animation.Animator;
 import util.handling.Camera;
 import util.handling.PawnHandler;
-import util.input.ClickListener;
-import util.input.Mouse;
-import util.output.Log;
-import util.output.Music;
 
-public class Game {
+public class Main {
 
 	// The window handle
 	public static long window;
@@ -136,9 +137,10 @@ public class Game {
 		Line.init();
 		Point.init();
 		Log.log("Loading the rest");
-		proj = new Matrix4f().ortho(0, Game.WIDTH, 0, Game.HEIGHT, -1.0f, 1.0f);
+		SocketConnection.connect();
+		proj = new Matrix4f().ortho(0, Main.WIDTH, 0, Main.HEIGHT, -1.0f, 1.0f);
 		projSave = new Matrix4f(proj);
-		map = new Map("map", Game.WIDTH * 0.5f, Game.HEIGHT * 0.5f);
+		map = new Map("map", Main.WIDTH * 0.5f, Main.HEIGHT * 0.5f);
 		PawnHandler.getInstance(); // initial load. map must already be loaded
 		
 		// Set the clear color
@@ -198,6 +200,7 @@ public class Game {
 			lastSystemTime = currentSystemTime;
 		}
 		
+		SocketConnection.started = false;
 		Textures.destroy();
 		Shaders.destroy();
 		Sounds.destroy();
@@ -208,7 +211,7 @@ public class Game {
 	}
 	
 	public static void restoreProj() {
-		Game.proj = projSave;
+		Main.proj = projSave;
 	}
 	
 	public static void updateGame() {

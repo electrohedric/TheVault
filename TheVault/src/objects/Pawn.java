@@ -1,15 +1,14 @@
 package objects;
 
 import constants.Mode;
-import constants.Sounds;
 import constants.Textures;
 import gl.Texture;
 import guis.PlayScreen;
 import guis.SetupScreen;
-import main.Game;
+import io.Mouse;
+import main.Main;
 import util.animation.Animator;
 import util.handling.PawnHandler;
-import util.input.Mouse;
 
 /**
  * This Game's equivalent of a Player
@@ -83,7 +82,7 @@ public class Pawn extends GameObject {
 
 	@Override
 	public void render() {
-		if(grabbed && Game.mode == Mode.PLAY) {
+		if(grabbed && Main.mode == Mode.PLAY) {
 			PawnHandler.getInstance().renderMoveableTileHighlights();
 			ghost.render();
 		}
@@ -91,8 +90,8 @@ public class Pawn extends GameObject {
 	}
 	
 	private void setGhostHere() {
-		ghost.x = onTile.getAbsoluteX(Game.map.getCamera());
-		ghost.y = onTile.getAbsoluteY(Game.map.getCamera());
+		ghost.x = onTile.getAbsoluteX(Main.map.getCamera());
+		ghost.y = onTile.getAbsoluteY(Main.map.getCamera());
 	}
 	
 	/**
@@ -115,7 +114,7 @@ public class Pawn extends GameObject {
 	}
 	
 	public void placeOnTile(Tile t) {
-		switch(Game.mode) {
+		switch(Main.mode) {
 		case PLAY:
 			if(PawnHandler.getInstance().canMoveThere(t)) {
 				PlayScreen.getInstance().showCorrespondingButton(t);
@@ -133,7 +132,7 @@ public class Pawn extends GameObject {
 			}
 			if(startingSquare) {
 				// now we must check there are no other players on this tile
-				for(Pawn p : Game.pawns) {
+				for(Pawn p : Main.pawns) {
 					if(p != this && p.getTile() == t)
 						return; // found another pawn on this tile. no good
 				}
@@ -144,14 +143,14 @@ public class Pawn extends GameObject {
 			break;
 		}
 		setGrabable(false); // disable grabbing until animation has finished
-		Animator.lerp(this, t.getAbsoluteX(Game.map.getCamera()), t.getAbsoluteY(Game.map.getCamera()), 0.1f, () -> {
+		Animator.lerp(this, t.getAbsoluteX(Main.map.getCamera()), t.getAbsoluteY(Main.map.getCamera()), 0.1f, () -> {
 			setGrabable(true);
 		});
 		onTile = t;
 	}
 	
 	public void removeFromTile() {
-		switch(Game.mode) {
+		switch(Main.mode) {
 		case PLAY:
 			PlayScreen.getInstance().hideActionButtons();
 			PlayScreen.getInstance().getDoneButton().disable();

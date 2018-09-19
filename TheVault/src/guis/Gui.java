@@ -9,7 +9,7 @@ import static org.lwjgl.glfw.GLFW.*;
 
 import gl.Texture;
 import guis.elements.Button;
-import main.Game;
+import main.Main;
 
 public abstract class Gui {
 
@@ -42,7 +42,7 @@ public abstract class Gui {
 	};
 	
 	protected static void setMousePointer(long cursor) {
-		glfwSetCursor(Game.window, cursor);
+		glfwSetCursor(Main.window, cursor);
 	}
 	
 	protected static long getMousePointer() {

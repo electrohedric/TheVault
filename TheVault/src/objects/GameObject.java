@@ -6,10 +6,10 @@ import org.joml.Matrix4f;
 
 import constants.Shaders;
 import gl.Shader;
-import main.Game;
+import io.Mouse;
+import main.Main;
 import util.handling.Camera;
 import util.handling.Collision;
-import util.input.Mouse;
 
 // TODO this should probably be abstract eventually
 public class GameObject {
@@ -61,7 +61,7 @@ public class GameObject {
 			program.bind();
 			activeTexture.bind(slot);
 			Rect.bind(); // binds the VAO
-			proj.set(Game.proj);
+			proj.set(Main.proj);
 			float trueScale = getTrueScale();
 			model = model.
 					translation(x - camera.x, y - camera.y, 0).
@@ -84,7 +84,7 @@ public class GameObject {
 	 * Renders using absolute positioning
 	 */
 	public void render() {
-		render(Game.nullCamera);
+		render(Main.nullCamera);
 	}
 
 	public void setActiveTexture(Surface activeTexture) {
@@ -101,8 +101,8 @@ public class GameObject {
 	 */
 	public float getTrueScale() {
 		if(activeTexture != null) {
-			float scaledWidthRatio = Game.WIDTH * scale / activeTexture.getWidth();
-			float scaledHeightRatio = Game.HEIGHT * scale / activeTexture.getHeight();
+			float scaledWidthRatio = Main.WIDTH * scale / activeTexture.getWidth();
+			float scaledHeightRatio = Main.HEIGHT * scale / activeTexture.getHeight();
 			return Math.min(scaledWidthRatio, scaledHeightRatio);
 		}
 		return 0.0f;

@@ -1,6 +1,5 @@
-/util/
-/guis/
 /main/
 /objects/
-/constants/
-/gl/
+/util/
+/io/
+/guis/

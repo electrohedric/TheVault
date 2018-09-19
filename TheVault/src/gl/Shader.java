@@ -16,7 +16,7 @@ import org.joml.Vector4f;
 import org.lwjgl.BufferUtils;
 
 import constants.Resources;
-import util.output.Log;
+import io.Log;
 
 public class Shader {
 	
