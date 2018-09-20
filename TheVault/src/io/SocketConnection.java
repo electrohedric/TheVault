@@ -1,12 +1,14 @@
 package io;
 
 import java.io.BufferedReader;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 
 import guis.SetupScreen;
 
@@ -15,6 +17,7 @@ public class SocketConnection implements Runnable {
 	public static boolean started = false;
 	public static ReceiveMode receiving;
 	public static String gameID;
+	public static Map<String, String> colorToClient = new HashMap<>();
 	
 	public static void connect() {
 		if(!started) {
@@ -34,15 +37,16 @@ public class SocketConnection implements Runnable {
 		URL url = new URL("HTTP", "localhost", 4096, file);
 		HttpURLConnection con = (HttpURLConnection) url.openConnection();
 		con.setRequestMethod("POST");
-		con.setDoOutput(true); // POST mode
-		con.setConnectTimeout(5);
-		con.setReadTimeout(0);
 		con.setRequestProperty("Accept", "text/event-stream");
+		con.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+		con.setDoOutput(true); // POST mode
 		if(msg != null) {
-			OutputStream output = con.getOutputStream();
-			output.write(msg.getBytes("UTF-8"));
+			try(DataOutputStream wr = new DataOutputStream(con.getOutputStream())) {
+				wr.writeBytes(msg);
+				wr.flush();
+				wr.close();
+			}
 		}
-		con.connect();
 		return con;
 	}
 	
@@ -79,7 +83,7 @@ public class SocketConnection implements Runnable {
 				switch(receiving) {
 				case GAME_ID:
 					gameID = data;
-					Log.log("My game ID is '" + gameID); // TODO display this number
+					Log.log("My game ID is " + gameID); // TODO display this number
 					receiving = ReceiveMode.DEVICES;
 					break;
 				case DEVICES:
@@ -89,9 +93,16 @@ public class SocketConnection implements Runnable {
 						String clientColor = elements[1];
 						Log.log("ID=" + clientID + " wants color " + clientColor);
 						HttpURLConnection permitCon = sendRequest("/permit-client", String.format("client-id=%s&game-id=%s", clientID, gameID)); // permit this client
+//						BufferedReader br = new BufferedReader(new InputStreamReader(permitCon.getInputStream(), "UTF-8"), 8); // dont actually care, we just got to read something for data to get sent
+//						try {
+//							br.readLine();
+//						} catch(IOException io) {}
+//						finally {;
+//							br.close();
+//						}
 						if(permitCon.getResponseCode() == 200) {
 							SetupScreen.getInstance().choosePawn(clientColor.toLowerCase());
-							// FIXME link the client with their pawn to send the proper updates
+							colorToClient.put(clientColor.toLowerCase(), clientID);
 						}
 						permitCon.disconnect();
 					} // otherwise ignore

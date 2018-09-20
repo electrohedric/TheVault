@@ -1,11 +1,14 @@
 package objects;
 
+import java.io.IOException;
+
 import constants.Mode;
 import constants.Textures;
 import gl.Texture;
 import guis.PlayScreen;
 import guis.SetupScreen;
 import io.Mouse;
+import io.SocketConnection;
 import main.Main;
 import util.animation.Animator;
 import util.handling.PawnHandler;
@@ -20,6 +23,7 @@ public class Pawn extends GameObject {
 	private Color color;
 	private Tile onTile;
 	private GameObject ghost;
+	private String clientID;
 	// TODO add cards
 	
 	// these are all properties of the pawn per turn
@@ -39,6 +43,7 @@ public class Pawn extends GameObject {
 		setActiveTexture(color.texture);
 		this.ghost = new GameObject(0, 0, 0, 0); // not ready for rendering yet until resetTurn
 		ghost.setActiveTexture(color.texture); // TODO instead of scaling down, decrease alpha
+		this.clientID = color.string;
 		
 		this.movesPerTurn = 3;
 		this.actionsPerTurn = 2;
@@ -168,18 +173,28 @@ public class Pawn extends GameObject {
 		return ghost;
 	}
 	
+	public void sendClientCard(Card card) {
+		try {
+			SocketConnection.sendRequest("/send-card", String.format("client-id=%s&game-id=%s&card=%s", clientID, SocketConnection.gameID, card.getImageName()));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	@Override
 	public String toString() {
 		return String.format("Pawn: color=%s, tile=[%s]", color, getTile());
 	}
 	
 	public static enum Color {
-		RED("pawn_red"), GREEN("pawn_green"), BLUE("pawn_blue"), YELLOW("pawn_yellow");
+		RED("red"), GREEN("green"), BLUE("blue"), YELLOW("yellow");
 		
-		private Texture texture;
+		public Texture texture;
+		public String string;
 		
 		private Color(String textureName) {
-			this.texture = Textures.get(textureName);
+			this.texture = Textures.get("pawn_" + textureName);
+			this.string = textureName;
 		}
 		
 		public static Color fromTexture(Texture texture) {
@@ -187,6 +202,11 @@ public class Pawn extends GameObject {
 				if(c.texture == texture)
 					return c;
 			return null;
+		}
+		
+		@Override
+		public String toString() {
+			return string;
 		}
 	}
 

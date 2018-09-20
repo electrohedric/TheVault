@@ -156,7 +156,7 @@ public class SetupScreen extends Gui {
 			Animator.lerp(b, b.x, pawnFinalY, 0.2f, () -> {
 				b.enable(); // when done animating, enable the button
 			});
-			pawnStringsChosen.add(name);
+			pawnStringsChosen.add(name); // TODO name is color make that thing in the other class do this
 			pawnButtonsChosen.add(b);
 			Sounds.play("up");
 		} else { // and vice-versa
